@@ -1,3 +1,4 @@
+import { classNames } from '../lib/uiStyles';
 import { useEffect, useState } from 'react';
 import { apiRequest } from '../lib/api';
 import type {
@@ -256,9 +257,9 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
   const isCatalog = ['products', 'articles', 'banners'].includes(activeSection);
 
   return (
-    <div className="admin-layout">
-      <aside className="admin-sidebar">
-        <div className="admin-sidebar-heading">QUẢN TRỊ TBT 360</div>
+    <div className={classNames('adminLayout')}>
+      <aside className={classNames('adminSidebar')}>
+        <div className={classNames('adminSidebarHeading')}>QUẢN TRỊ TBT 360</div>
         {adminTabs.map((tab) =>
         {
           return (
@@ -271,22 +272,27 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                 setFormData(null);
                 setFeedback('');
               }}
-              className={activeSection === tab.id ? 'selected' : ''}
+              className={classNames(
+                'adminSidebarButton',
+                activeSection === tab.id && 'adminSidebarButtonSelected',
+              )}
             >
               <span aria-hidden="true">{tab.icon}</span> {tab.title}
             </button>
           );
         })}
       </aside>
-      <section className="admin-content">
-        <div className="section-title-row">
+      <section className={classNames('adminContent')}>
+        <div className={classNames('sectionTitleRow')}>
           <div>
-            <p className="eyebrow">TBT 360 / ADMIN</p>
-            <h2>{adminTabs.find((tab) => tab.id === activeSection)?.title}</h2>
+            <p className={classNames('eyebrow')}>TBT 360 / ADMIN</p>
+            <h2 className={classNames('sectionTitle')}>
+              {adminTabs.find((tab) => tab.id === activeSection)?.title}
+            </h2>
           </div>
           {isCatalog && !formData && (
             <button
-              className="primary-button"
+              className={classNames('primaryButton')}
               type="button"
               onClick={() =>
               {
@@ -297,9 +303,9 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
             </button>
           )}
         </div>
-        {feedback && <p className="feedback-message" role="status">{feedback}</p>}
+        {feedback && <p className={classNames('feedbackMessage')} role="status">{feedback}</p>}
         {activeSection === 'dashboard' && (
-          <div className="admin-stats">
+          <div className={classNames('adminStats')}>
             {[
               ['Sản phẩm', dashboard?.products],
               ['Bài viết', dashboard?.articles],
@@ -309,9 +315,9 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
             ].map(([label, value]) =>
             {
               return (
-                <article className="stat-card" key={String(label)}>
-                  <strong>{value ?? '—'}</strong>
-                  <span>{label}</span>
+                <article className={classNames('statCard')} key={String(label)}>
+                  <strong className={classNames('statNumber')}>{value ?? '—'}</strong>
+                  <span className={classNames('statCaption')}>{label}</span>
                 </article>
               );
             })}
@@ -320,22 +326,25 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
         {isCatalog && (
           <>
             {formData && (
-              <form className="editor-form" onSubmit={(event) =>
+              <form className={classNames('editorForm')} onSubmit={(event) =>
               {
                 event.preventDefault();
                 void saveItem();
               }}>
-                <h3>{editingId ? 'Chỉnh sửa' : 'Thêm mới'}</h3>
+                <h3 className={classNames('editorFormTitle')}>
+                  {editingId ? 'Chỉnh sửa' : 'Thêm mới'}
+                </h3>
                 {fieldDefinitions[
                   activeSection as 'products' | 'articles' | 'banners'
                 ].map((field) =>
                 {
                   const currentValue = formData[field.key];
                   return (
-                    <label key={field.key} className="form-field">
+                    <label key={field.key} className={classNames('formField')}>
                       <span>{field.label}</span>
                       {field.type === 'textarea' ? (
                         <textarea
+                          className={classNames('formInput')}
                           rows={field.key === 'body' ? 7 : 3}
                           value={String(currentValue ?? '')}
                           onChange={(event) =>
@@ -348,6 +357,7 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                         />
                       ) : field.type === 'checkbox' ? (
                         <input
+                          className={classNames('formCheckbox')}
                           type="checkbox"
                           checked={Boolean(currentValue)}
                           onChange={(event) =>
@@ -360,6 +370,7 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                         />
                       ) : (
                         <input
+                          className={classNames('formInput')}
                           type={field.type}
                           value={String(currentValue ?? '')}
                           onChange={(event) =>
@@ -378,22 +389,22 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                 })}
                 {activeSection === 'banners' && Boolean(formData.imageUrl) && (
                   <img
-                    className="admin-banner-preview"
+                    className={classNames('adminBannerPreview')}
                     src={String(formData.imageUrl)}
                     alt="Xem trước banner"
                   />
                 )}
-                <div className="form-actions">
-                  <button className="primary-button" disabled={isWorking}>
+                <div className={classNames('formActions')}>
+                  <button className={classNames('primaryButton')} disabled={isWorking}>
                     Lưu thay đổi
                   </button>
-                  <button type="button" onClick={() => setFormData(null)}>
+                  <button className={classNames('secondaryButton')} type="button" onClick={() => setFormData(null)}>
                     Hủy
                   </button>
                 </div>
               </form>
             )}
-            <div className="admin-records">
+            <div className={classNames('adminRecords')}>
               {catalogData.map((item) =>
               {
                 const itemTitle = 'name' in item
@@ -405,18 +416,19 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                     ? item.summary
                     : item.imageUrl;
                 return (
-                  <article className="admin-record" key={item.id}>
+                  <article className={classNames('adminRecord')} key={item.id}>
                     <div>
                       <strong>{itemTitle}</strong>
-                      <p>{itemDescription}</p>
-                      <span className={item.isPublished
-                        ? 'published-pill'
-                        : 'hidden-pill'}>
+                      <p className={classNames('adminRecordDescription')}>{itemDescription}</p>
+                      <span className={classNames(
+                        item.isPublished ? 'publishedPill' : 'hiddenPill',
+                      )}>
                         {item.isPublished ? 'Đang hiển thị' : 'Đang ẩn'}
                       </span>
                     </div>
-                    <div className="record-actions">
+                    <div className={classNames('recordActions')}>
                       <button
+                        className={classNames('secondaryButton')}
                         type="button"
                         onClick={() =>
                         {
@@ -429,6 +441,7 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                         Sửa
                       </button>
                       <button
+                        className={classNames('dangerButton')}
                         type="button"
                         onClick={() =>
                         {
@@ -448,17 +461,20 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
           </>
         )}
         {activeSection === 'orders' && (
-          <div className="admin-records">
+          <div className={classNames('adminRecords')}>
             {orders.map((order) =>
             {
               return (
-                <article className="admin-record" key={order.id}>
+                <article className={classNames('adminRecord')} key={order.id}>
                   <div>
                     <strong>{order.customerName} — {order.productName}</strong>
-                    <p>{order.email} · {order.phone} · {order.note}</p>
+                    <p className={classNames('adminRecordDescription')}>
+                      {order.email} · {order.phone} · {order.note}
+                    </p>
                     <small>{new Date(order.createdAt).toLocaleString('vi-VN')}</small>
                   </div>
                   <select
+                    className={classNames('adminSelect')}
                     value={order.status}
                     onChange={(event) =>
                     {
@@ -476,14 +492,14 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
           </div>
         )}
         {activeSection === 'contacts' && (
-          <div className="admin-records">
+          <div className={classNames('adminRecords')}>
             {contacts.map((contact) =>
             {
               return (
-                <article className="admin-record" key={contact.id}>
+                <article className={classNames('adminRecord')} key={contact.id}>
                   <div>
                     <strong>{contact.fullName} — {contact.email}</strong>
-                    <p>{contact.message}</p>
+                    <p className={classNames('adminRecordDescription')}>{contact.message}</p>
                     <small>{new Date(contact.createdAt).toLocaleString('vi-VN')}</small>
                   </div>
                 </article>
@@ -492,7 +508,7 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
           </div>
         )}
         {activeSection === 'settings' && siteSettings && (
-          <form className="editor-form" onSubmit={(event) =>
+          <form className={classNames('editorForm')} onSubmit={(event) =>
           {
             event.preventDefault();
             void saveSettings();
@@ -506,9 +522,12 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
             ] as const).map(([fieldKey, fieldLabel, inputType]) =>
             {
               return (
-                <label className="form-field" key={fieldKey}>
+                <label className={classNames('formField')} key={fieldKey}>
                   <span>{fieldLabel}</span>
                   <input
+                    className={classNames(
+                      inputType === 'color' ? 'formColor' : 'formInput',
+                    )}
                     type={inputType}
                     value={siteSettings[fieldKey]}
                     onChange={(event) =>
@@ -522,7 +541,7 @@ export function AdminPanel({ onContentChanged }: AdminPanelProps)
                 </label>
               );
             })}
-            <button className="primary-button">Lưu cài đặt</button>
+            <button className={classNames('primaryButton')}>Lưu cài đặt</button>
           </form>
         )}
       </section>

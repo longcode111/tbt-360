@@ -8,7 +8,7 @@ và chưa phải bản triển khai production.
 
 | Thành phần | Công nghệ | Mục đích |
 | --- | --- | --- |
-| Frontend | React 19, TypeScript, Vite 7 | UI, trang công khai, Admin |
+| Frontend | React 19, TypeScript, Vite 7, **Tailwind CSS v4** | UI, trang công khai, Admin |
 | Backend | ASP.NET Core 10 Minimal API | REST API, phân quyền |
 | Database | PostgreSQL 17 + Entity Framework Core 10 (Npgsql) | Dữ liệu chính |
 | Xác thực | OAuth 2.0 + OpenID Connect | Authorization Code + PKCE |
@@ -81,6 +81,15 @@ PostgreSQL cổng 5432.
 **Lưu ý tài khoản local:** mật khẩu ví dụ trong `.env.example` chỉ dùng để
 thử nghiệm. `scripts/run-api-mac.sh` đọc file `.env` và đưa connection string
 qua biến môi trường; không commit `.env` hoặc mật khẩu thật.
+
+## Giao diện Tailwind CSS v4
+
+- Không còn stylesheet CSS dài `frontend/src/styles.css`.
+- `frontend/src/tailwind.css` nạp Tailwind v4 và màu mặc định.
+- `frontend/src/lib/uiStyles.ts` quản lý các Tailwind utility dùng chung,
+  gồm header, sản phẩm, biểu mẫu và Admin.
+- Màu đỏ chủ đạo vẫn thay đổi trong Admin và lưu ở PostgreSQL.
+- Chi tiết xem [`docs/TAILWIND.md`](docs/TAILWIND.md).
 
 ## Dùng Admin
 

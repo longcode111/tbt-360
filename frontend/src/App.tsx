@@ -1,3 +1,4 @@
+import { classNames } from './lib/uiStyles';
 import { useCallback, useEffect, useState } from 'react';
 import { AdminPanel } from './components/AdminPanel';
 import { BannerCarousel } from './components/BannerCarousel';
@@ -253,64 +254,79 @@ export function App()
   };
 
   return (
-    <div className="site-shell">
-      <div className="utility-bar">
-        <div className="container utility-inner">
+    <div className={classNames('siteShell')}>
+      <div className={classNames('utilityBar')}>
+        <div className={classNames('container', 'utilityInner')}>
           <span>HỆ SINH THÁI TBT 360 • BIM • CDE • QUẢN LÝ XÂY DỰNG</span>
-          <span>Tiếng Việt · Hỗ trợ trực tuyến</span>
+          <span className={classNames('utilitySecondary')}>
+            Tiếng Việt · Hỗ trợ trực tuyến
+          </span>
         </div>
       </div>
-      <header className="site-header">
-        <div className="container header-inner">
-          <a className="brand" href="#home" aria-label="TBT 360 trang chủ">
-            <span className="brand-symbol"><b>T</b><b>B</b><b>T</b></span>
-            <span className="brand-subtitle">
+      <header className={classNames('siteHeader')}>
+        <div className={classNames('container', 'headerInner')}>
+          <a className={classNames('brand')} href="#home" aria-label="TBT 360 trang chủ">
+            <span className={classNames('brandSymbol')}>
+              <b>T</b>
+              <b className={classNames('brandMiddle')}>B</b>
+              <b>T</b>
+            </span>
+            <span className={classNames('brandSubtitle')}>
               CÔNG NGHỆ VIỆT
               <br />
               CHO CÔNG TRÌNH VIỆT
             </span>
           </a>
-          <div className="header-search">
-            <span aria-hidden="true">⌕</span>
+          <div className={classNames('headerSearch')}>
+            <span className={classNames('headerSearchIcon')} aria-hidden="true">
+              ⌕
+            </span>
             <input
+              className={classNames('headerSearchInput')}
               aria-label="Tìm sản phẩm hoặc bài viết"
               placeholder="Tìm sản phẩm, tài liệu, hướng dẫn..."
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
             />
           </div>
-          <div className="header-account">
+          <div className={classNames('headerAccount')}>
             {isAuthenticated ? (
               <>
-                <span className="account-label">
+                <span className={classNames('accountLabel')}>
                   {currentUser?.name || 'Tài khoản'}
                 </span>
-                <button type="button" onClick={() => void startLogout()}>
+                <button className={classNames('headerAccountButton')} type="button" onClick={() => void startLogout()}>
                   Đăng xuất
                 </button>
               </>
             ) : (
-              <button type="button" onClick={() => void startLogin()}>
+              <button className={classNames('headerAccountButton')} type="button" onClick={() => void startLogin()}>
                 ◯ Đăng nhập
               </button>
             )}
           </div>
           <button
             type="button"
-            className="mobile-menu-button"
+            className={classNames('mobileMenuButton')}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Mở menu"
           >
             ☰
           </button>
         </div>
-        <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`}>
-          <div className="container nav-inner">
+        <nav className={classNames(
+          'mainNav',
+          mobileMenuOpen ? 'mainNavOpen' : 'mainNavClosed',
+        )}>
+          <div className={classNames('container', 'navInner')}>
             {navigationItems.map((navigationItem) =>
             {
               return (
                 <a
-                  className={currentPage === navigationItem.hash ? 'active' : ''}
+                  className={classNames(
+                    'navLink',
+                    currentPage === navigationItem.hash && 'navLinkActive',
+                  )}
                   href={navigationItem.hash}
                   key={navigationItem.hash}
                 >
@@ -320,7 +336,7 @@ export function App()
             })}
             {mobileMenuOpen && !isAuthenticated && (
               <button
-                className="nav-login"
+                className={classNames('navLogin')}
                 type="button"
                 onClick={() => void startLogin()}
               >
@@ -329,7 +345,7 @@ export function App()
             )}
             {mobileMenuOpen && isAuthenticated && (
               <button
-                className="nav-login"
+                className={classNames('navLogin')}
                 type="button"
                 onClick={() => void startLogout()}
               >
@@ -338,7 +354,10 @@ export function App()
             )}
             {currentUser?.isAdmin && (
               <a
-                className={currentPage === '#admin' ? 'active' : ''}
+                className={classNames(
+                  'navLink',
+                  currentPage === '#admin' && 'navLinkActive',
+                )}
                 href="#admin"
               >
                 ⚙ Quản trị
@@ -351,55 +370,66 @@ export function App()
         {currentPage === '#home' && (
           <>
             <BannerCarousel banners={banners} />
-            <div className="container">
-              <section className="intro-panel">
+            <div className={classNames('container')}>
+              <section className={classNames('introPanel')}>
                 <div>
-                  <p className="eyebrow">GIẢI PHÁP QUẢN LÝ XÂY DỰNG</p>
-                  <h1>{settings.siteName}</h1>
-                  <p>{settings.slogan}</p>
-                  <div className="hero-actions">
-                    <a className="primary-button" href="#products">
+                  <p className={classNames('introEyebrow')}>
+                    GIẢI PHÁP QUẢN LÝ XÂY DỰNG
+                  </p>
+                  <h1 className={classNames('introTitle')}>{settings.siteName}</h1>
+                  <p className={classNames('introDescription')}>{settings.slogan}</p>
+                  <div className={classNames('heroActions')}>
+                    <a className={classNames('primaryButton')} href="#products">
                       Khám phá sản phẩm ↗
                     </a>
-                    <a className="outline-button" href="#contact">
+                    <a className={classNames('outlineButton')} href="#contact">
                       Liên hệ tư vấn
                     </a>
                   </div>
                 </div>
-                <div className="intro-feature-list">
-                  <div><b>01</b><span>Quản lý dự án và thi công</span></div>
-                  <div><b>02</b><span>Hồ sơ nghiệm thu số hóa</span></div>
-                  <div><b>03</b><span>Quản lý mô hình BIM / CDE</span></div>
+                <div className={classNames('introFeatureList')}>
+                  <div className={classNames('introFeature')}>
+                    <b className={classNames('introFeatureNumber')}>01</b>
+                    <span>Quản lý dự án và thi công</span>
+                  </div>
+                  <div className={classNames('introFeature')}>
+                    <b className={classNames('introFeatureNumber')}>02</b>
+                    <span>Hồ sơ nghiệm thu số hóa</span>
+                  </div>
+                  <div className={classNames('introFeature')}>
+                    <b className={classNames('introFeatureNumber')}>03</b>
+                    <span>Quản lý mô hình BIM / CDE</span>
+                  </div>
                 </div>
               </section>
-              <div className="section-title-row">
+              <div className={classNames('sectionTitleRow')}>
                 <div>
-                  <p className="eyebrow">KHÁM PHÁ GIẢI PHÁP</p>
-                  <h2>Sản phẩm & dịch vụ</h2>
+                  <p className={classNames('eyebrow')}>KHÁM PHÁ GIẢI PHÁP</p>
+                  <h2 className={classNames('sectionTitle')}>Sản phẩm & dịch vụ</h2>
                 </div>
-                <a className="text-link" href="#products">Xem tất cả →</a>
+                <a className={classNames('textLink')} href="#products">Xem tất cả →</a>
               </div>
               <ProductGrid
                 products={filteredProducts.slice(0, 3)}
                 onChoose={setSelectedProduct}
               />
-              <div className="section-title-row">
+              <div className={classNames('sectionTitleRow')}>
                 <div>
-                  <p className="eyebrow">TÀI NGUYÊN CHUYÊN MÔN</p>
-                  <h2>Hướng dẫn & kiến thức</h2>
+                  <p className={classNames('eyebrow')}>TÀI NGUYÊN CHUYÊN MÔN</p>
+                  <h2 className={classNames('sectionTitle')}>Hướng dẫn & kiến thức</h2>
                 </div>
-                <a className="text-link" href="#articles">Xem tất cả →</a>
+                <a className={classNames('textLink')} href="#articles">Xem tất cả →</a>
               </div>
               <ArticleGrid articles={filteredArticles.slice(0, 3)} />
             </div>
           </>
         )}
         {currentPage === '#products' && (
-          <div className="container page-content">
-            <div className="page-heading">
-              <p className="eyebrow">NỀN TẢNG TBT 360</p>
-              <h1>Sản phẩm & dịch vụ</h1>
-              <p>Danh mục được cập nhật trực tiếp từ hệ thống quản trị.</p>
+          <div className={classNames('container', 'pageContent')}>
+            <div className={classNames('pageHeading')}>
+              <p className={classNames('eyebrow')}>NỀN TẢNG TBT 360</p>
+              <h1 className={classNames('pageHeadingTitle')}>Sản phẩm & dịch vụ</h1>
+              <p className={classNames('pageHeadingDescription')}>Danh mục được cập nhật trực tiếp từ hệ thống quản trị.</p>
             </div>
             <ProductGrid
               products={filteredProducts}
@@ -408,38 +438,38 @@ export function App()
           </div>
         )}
         {currentPage === '#articles' && (
-          <div className="container page-content">
-            <div className="page-heading">
-              <p className="eyebrow">THƯ VIỆN TBT 360</p>
-              <h1>Hướng dẫn sử dụng</h1>
-              <p>Chia sẻ kiến thức quản lý xây dựng, BIM và CDE.</p>
+          <div className={classNames('container', 'pageContent')}>
+            <div className={classNames('pageHeading')}>
+              <p className={classNames('eyebrow')}>THƯ VIỆN TBT 360</p>
+              <h1 className={classNames('pageHeadingTitle')}>Hướng dẫn sử dụng</h1>
+              <p className={classNames('pageHeadingDescription')}>Chia sẻ kiến thức quản lý xây dựng, BIM và CDE.</p>
             </div>
             <ArticleGrid articles={filteredArticles} />
           </div>
         )}
         {currentPage === '#about' && (
-          <div className="container page-content">
-            <div className="page-heading">
-              <p className="eyebrow">VỀ CHÚNG TÔI</p>
-              <h1>Công nghệ Việt cho công trình Việt</h1>
-              <p>
+          <div className={classNames('container', 'pageContent')}>
+            <div className={classNames('pageHeading')}>
+              <p className={classNames('eyebrow')}>VỀ CHÚNG TÔI</p>
+              <h1 className={classNames('pageHeadingTitle')}>Công nghệ Việt cho công trình Việt</h1>
+              <p className={classNames('pageHeadingDescription')}>
                 TBT 360 hướng đến kết nối dữ liệu, quy trình nghiệm thu và quản lý
                 dự án trên một nền tảng thống nhất, dễ mở rộng.
               </p>
             </div>
-            <div className="about-grid">
-              <article>
-                <span>01</span>
+            <div className={classNames('aboutGrid')}>
+              <article className={classNames('aboutCard')}>
+                <span className={classNames('aboutNumber')}>01</span>
                 <h3>BIM</h3>
                 <p>Mô hình và dữ liệu công trình.</p>
               </article>
-              <article>
-                <span>02</span>
+              <article className={classNames('aboutCard')}>
+                <span className={classNames('aboutNumber')}>02</span>
                 <h3>CDE</h3>
                 <p>Môi trường dữ liệu chung.</p>
               </article>
-              <article>
-                <span>03</span>
+              <article className={classNames('aboutCard')}>
+                <span className={classNames('aboutNumber')}>03</span>
                 <h3>360</h3>
                 <p>Quản lý xuyên suốt vòng đời dự án.</p>
               </article>
@@ -447,35 +477,35 @@ export function App()
           </div>
         )}
         {currentPage === '#contact' && (
-          <div className="container page-content contact-grid">
+          <div className={classNames('container', 'pageContent', 'contactGrid')}>
             <div>
-              <p className="eyebrow">KẾT NỐI VỚI CHÚNG TÔI</p>
-              <h1>Liên hệ hỗ trợ</h1>
+              <p className={classNames('eyebrow')}>KẾT NỐI VỚI CHÚNG TÔI</p>
+              <h1 className={classNames('pageHeadingTitle')}>Liên hệ hỗ trợ</h1>
               <p>Điện thoại: {settings.supportPhone}</p>
               <p>Email: {settings.supportEmail}</p>
             </div>
-            <form className="editor-form" onSubmit={(event) =>
+            <form className={classNames('editorForm')} onSubmit={(event) =>
             {
               event.preventDefault();
               void submitContact(new FormData(event.currentTarget));
             }}>
-              <h3>Gửi yêu cầu</h3>
-              <label className="form-field">
-                Họ và tên<input name="fullName" maxLength={120} required />
+              <h3 className={classNames('editorFormTitle')}>Gửi yêu cầu</h3>
+              <label className={classNames('formField')}>
+                Họ và tên<input className={classNames('formInput')} name="fullName" maxLength={120} required />
               </label>
-              <label className="form-field">
-                Email<input name="email" type="email" required />
+              <label className={classNames('formField')}>
+                Email<input className={classNames('formInput')} name="email" type="email" required />
               </label>
-              <label className="form-field">
-                Nội dung<textarea name="message" rows={6} required />
+              <label className={classNames('formField')}>
+                Nội dung<textarea className={classNames('formInput')} name="message" rows={6} required />
               </label>
               {!isAuthenticated && (
-                <p className="small-note">
+                <p className={classNames('smallNote')}>
                   Vui lòng đăng nhập để gửi yêu cầu hỗ trợ.
                 </p>
               )}
               <button
-                className="primary-button"
+                className={classNames('primaryButton')}
                 disabled={isSubmitting || !isAuthenticated}
               >
                 Gửi liên hệ
@@ -484,16 +514,16 @@ export function App()
           </div>
         )}
         {currentPage === '#admin' && (
-          <div className="container page-content">
+          <div className={classNames('container', 'pageContent')}>
             {currentUser?.isAdmin ? (
               <AdminPanel onContentChanged={reloadPublicData} />
             ) : (
-              <div className="access-panel">
+              <div className={classNames('accessPanel')}>
                 <h2>Trang quản trị</h2>
                 <p>Chỉ tài khoản có quyền admin mới được truy cập.</p>
                 {!isAuthenticated && (
                   <button
-                    className="primary-button"
+                    className={classNames('primaryButton')}
                     onClick={() => void startLogin()}
                   >
                     Đăng nhập
@@ -503,70 +533,72 @@ export function App()
             )}
           </div>
         )}
-        {isLoading && <div className="loading-note">Đang kết nối dữ liệu...</div>}
+        {isLoading && <div className={classNames('loadingNote')}>Đang kết nối dữ liệu...</div>}
         {formMessage && (
-          <div className="feedback-toast" role="status">
+          <div className={classNames('feedbackToast')} role="status">
             <span>{formMessage}</span>
-            <button onClick={() => setFormMessage('')} aria-label="Đóng">
+            <button className={classNames('feedbackToastClose')} onClick={() => setFormMessage('')} aria-label="Đóng">
               ×
             </button>
           </div>
         )}
       </main>
-      <footer className="site-footer">
-        <div className="container footer-grid">
-          <div>
-            <strong>TBT <span>360</span></strong>
-            <p>{settings.slogan}</p>
+      <footer className={classNames('siteFooter')}>
+        <div className={classNames('container', 'footerGrid')}>
+          <div className={classNames('footerColumn')}>
+            <strong className={classNames('footerBrand')}>
+              TBT <span className={classNames('footerBrandAccent')}>360</span>
+            </strong>
+            <p className={classNames('footerMuted')}>{settings.slogan}</p>
           </div>
-          <div>
-            <b>Liên kết nhanh</b>
-            <a href="#products">Sản phẩm</a>
-            <a href="#articles">Hướng dẫn</a>
+          <div className={classNames('footerColumn')}>
+            <b className={classNames('footerHeading')}>Liên kết nhanh</b>
+            <a className={classNames('footerMuted')} href="#products">Sản phẩm</a>
+            <a className={classNames('footerMuted')} href="#articles">Hướng dẫn</a>
           </div>
-          <div>
-            <b>Hỗ trợ</b>
-            <span>{settings.supportPhone}</span>
-            <span>{settings.supportEmail}</span>
+          <div className={classNames('footerColumn')}>
+            <b className={classNames('footerHeading')}>Hỗ trợ</b>
+            <span className={classNames('footerMuted')}>{settings.supportPhone}</span>
+            <span className={classNames('footerMuted')}>{settings.supportEmail}</span>
           </div>
         </div>
-        <div className="container footer-bottom">
+        <div className={classNames('container', 'footerBottom')}>
           © {new Date().getFullYear()} TBT 360. Nền tảng phát triển độc lập.
         </div>
       </footer>
       {selectedProduct && (
-        <div className="modal-overlay" role="presentation">
-          <form className="modal-panel" onSubmit={(event) =>
+        <div className={classNames('modalOverlay')} role="presentation">
+          <form className={classNames('modalPanel')} onSubmit={(event) =>
           {
             event.preventDefault();
             void submitOrder(new FormData(event.currentTarget));
           }}>
-            <div className="section-title-row">
-              <h2>Đặt hàng / yêu cầu tư vấn</h2>
-              <button type="button" onClick={() => setSelectedProduct(null)}>
+            <div className={classNames('sectionTitleRow')}>
+              <h2 className={classNames('sectionTitle')}>Đặt hàng / yêu cầu tư vấn</h2>
+              <button className={classNames('modalClose')} type="button" onClick={() => setSelectedProduct(null)}>
                 ✕
               </button>
             </div>
             <p><strong>{selectedProduct.name}</strong></p>
-            <label className="form-field">
-              Họ tên<input name="customerName" required maxLength={120} />
+            <label className={classNames('formField')}>
+              Họ tên<input className={classNames('formInput')} name="customerName" required maxLength={120} />
             </label>
-            <label className="form-field">
-              Email<input type="email" name="email" required />
+            <label className={classNames('formField')}>
+              Email<input className={classNames('formInput')} type="email" name="email" required />
             </label>
-            <label className="form-field">
-              Điện thoại<input name="phone" required maxLength={30} />
+            <label className={classNames('formField')}>
+              Điện thoại<input className={classNames('formInput')} name="phone" required maxLength={30} />
             </label>
-            <label className="form-field">
-              Ghi chú<textarea name="note" rows={3} maxLength={1000} />
+            <label className={classNames('formField')}>
+              Ghi chú<textarea className={classNames('formInput')} name="note" rows={3} maxLength={1000} />
             </label>
             {!isAuthenticated && (
-              <p className="small-note">
+              <p className={classNames('smallNote')}>
                 Để đặt hàng, hãy đăng nhập tài khoản OAuth 2.0 trước.
               </p>
             )}
             <button
-              className="primary-button"
+              className={classNames('primaryButton')}
               disabled={!isAuthenticated || isSubmitting}
             >
               Gửi yêu cầu
@@ -587,29 +619,30 @@ function ProductGrid({ products, onChoose }: ProductGridProps)
 {
   if (products.length === 0)
   {
-    return <p className="empty-state">Chưa có sản phẩm phù hợp.</p>;
+    return <p className={classNames('emptyState')}>Chưa có sản phẩm phù hợp.</p>;
   }
 
   return (
-    <div className="product-grid">
+    <div className={classNames('productGrid')}>
       {products.map((product) =>
       {
         return (
-          <article className="product-card" key={product.id}>
-            <div className="product-image">
+          <article className={classNames('productCard')} key={product.id}>
+            <div className={classNames('productImage')}>
               <img
+                className={classNames('productImageElement')}
                 src={product.imageUrl || '/banners/product-cover.svg'}
                 alt={product.name}
                 loading="lazy"
               />
             </div>
-            <div className="product-detail">
-              <span className="product-category">GIẢI PHÁP TBT 360</span>
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
-              <div className="product-bottom">
-                <strong>{formatPrice(product.price)}</strong>
-                <button type="button" onClick={() => onChoose(product)}>
+            <div className={classNames('productDetail')}>
+              <span className={classNames('productCategory')}>GIẢI PHÁP TBT 360</span>
+              <h3 className={classNames('productTitle')}>{product.name}</h3>
+              <p className={classNames('productDescription')}>{product.description}</p>
+              <div className={classNames('productBottom')}>
+                <strong className={classNames('productPrice')}>{formatPrice(product.price)}</strong>
+                <button className={classNames('productAction')} type="button" onClick={() => onChoose(product)}>
                   Tìm hiểu & đặt hàng →
                 </button>
               </div>
@@ -625,21 +658,21 @@ function ArticleGrid({ articles }: { articles: Article[] })
 {
   if (articles.length === 0)
   {
-    return <p className="empty-state">Chưa có bài viết phù hợp.</p>;
+    return <p className={classNames('emptyState')}>Chưa có bài viết phù hợp.</p>;
   }
 
   return (
-    <div className="article-grid">
+    <div className={classNames('articleGrid')}>
       {articles.map((article) =>
       {
         return (
-          <article className="article-card" key={article.id}>
-            <div className="article-marker">TBT 360 · KIẾN THỨC</div>
-            <h3>{article.title}</h3>
-            <p>{article.summary}</p>
+          <article className={classNames('articleCard')} key={article.id}>
+            <div className={classNames('articleMarker')}>TBT 360 · KIẾN THỨC</div>
+            <h3 className={classNames('articleTitle')}>{article.title}</h3>
+            <p className={classNames('articleDescription')}>{article.summary}</p>
             <details>
-              <summary>Đọc nội dung →</summary>
-              <div className="article-body">{article.body}</div>
+              <summary className={classNames('articleSummary')}>Đọc nội dung →</summary>
+              <div className={classNames('articleBody')}>{article.body}</div>
             </details>
           </article>
         );

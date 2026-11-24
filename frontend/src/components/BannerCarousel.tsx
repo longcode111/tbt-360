@@ -1,3 +1,4 @@
+import { classNames } from '../lib/uiStyles';
 import { useEffect, useState } from 'react';
 import type { Banner } from '../types/models';
 
@@ -53,28 +54,35 @@ export function BannerCarousel({ banners }: BannerCarouselProps)
   };
 
   return (
-    <section className="banner-carousel" aria-label="Banner TBT 360">
-      <div className="banner-image-frame">
+    <section className={classNames('bannerCarousel')} aria-label="Banner TBT 360">
+      <div className={classNames('bannerImageFrame')}>
         {visibleBanners.map((banner, bannerIndex) =>
         {
           return (
             <a
-              className={`banner-slide ${
-                currentIndex === bannerIndex ? 'active' : ''
-              }`}
+              className={classNames(
+                'bannerSlide',
+                currentIndex === bannerIndex
+                  ? 'bannerSlideActive'
+                  : 'bannerSlideInactive',
+              )}
               href={banner.targetUrl || '#products'}
               key={banner.id}
               aria-hidden={currentIndex !== bannerIndex}
               tabIndex={currentIndex === bannerIndex ? 0 : -1}
             >
-              <img src={banner.imageUrl} alt={banner.title} />
+              <img
+                className={classNames('bannerSlideImage')}
+                src={banner.imageUrl}
+                alt={banner.title}
+              />
             </a>
           );
         })}
         {visibleBanners.length > 1 && (
           <>
             <button
-              className="banner-arrow previous"
+              className={classNames('bannerArrow', 'bannerArrowPrevious')}
               type="button"
               onClick={() => changeSlide(-1)}
               aria-label="Banner trước"
@@ -82,7 +90,7 @@ export function BannerCarousel({ banners }: BannerCarouselProps)
               ‹
             </button>
             <button
-              className="banner-arrow next"
+              className={classNames('bannerArrow', 'bannerArrowNext')}
               type="button"
               onClick={() => changeSlide(1)}
               aria-label="Banner tiếp theo"
@@ -92,12 +100,17 @@ export function BannerCarousel({ banners }: BannerCarouselProps)
           </>
         )}
       </div>
-      <div className="banner-dots">
+      <div className={classNames('bannerDots')}>
         {visibleBanners.map((banner, bannerIndex) =>
         {
           return (
             <button
-              className={currentIndex === bannerIndex ? 'active' : ''}
+              className={classNames(
+                'bannerDot',
+                currentIndex === bannerIndex
+                  ? 'bannerDotActive'
+                  : 'bannerDotInactive',
+              )}
               type="button"
               key={banner.id}
               aria-label={`Chuyển đến ${banner.title}`}
